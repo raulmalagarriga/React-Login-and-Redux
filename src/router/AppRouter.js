@@ -9,7 +9,7 @@ const Approuter = () => {
     <>
         <BrowserRouter>
             <Routes>
-                <Route path='/auth*' element={<AuthRouter />}/>
+                <Route path='/auth/*' element={<AuthRouter />}/>
                 <Route path='/' element={<Home />}/>
             </Routes>
         </BrowserRouter>
