@@ -6,12 +6,12 @@ import 'firebase/auth';
 
 // Firebase params configuration conection:
 const firebaseConfig = {
-    apiKey: "AIzaSyA7EmZ-560h2XNcR1eWnJi2w9WrXnxjRak",
-    authDomain: "react-journal-app-de610.firebaseapp.com",
-    projectId: "react-journal-app-de610",
-    storageBucket: "react-journal-app-de610.appspot.com",
-    messagingSenderId: "121929640063",
-    appId: "1:121929640063:web:5a061488b1d7f4bd29f74a"
+  apiKey: "AIzaSyAW7U0awKD9-Iqr8GdOX-58Kjn6_SwcTHg",
+  authDomain: "react-eventapp.firebaseapp.com",
+  projectId: "react-eventapp",
+  storageBucket: "react-eventapp.appspot.com",
+  messagingSenderId: "251150530675",
+  appId: "1:251150530675:web:039cb38dd199affc789206"
   };
 // Initialize Firebase
 initializeApp(firebaseConfig);
