@@ -2,14 +2,14 @@
     display: flex;
 }
 .journal__sidebar{
-    background-color: $dark-gray;
+    background-color: $primary;
     color: white;
     display: flex;
     flex-direction: column;
     height: 100vh;
     padding-left: 10px;
     padding-right: 10px;
-    width: 450px;
+    width: 350px;
 }
 .journal__sidebar-navbar{
     display: flex;
@@ -73,3 +73,8 @@
 .journal__entry-date-box span{
     font-size: 12px;
 }
+@media screen and (max-width: 500px) {
+    .journal__sidebar{
+        display: none;
+    }
+  }
