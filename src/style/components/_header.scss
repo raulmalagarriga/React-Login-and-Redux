@@ -4,16 +4,17 @@
     background-color: $dark-gray;
     padding: 20px 10px;
     width: 100%;
-    height: 14%;
+    height: 10%;
   }
   
   /* Style the header links */
   .header__header-link{
+    background-color: transparent;
+    border: none;
     float: left;
     color: $white;
     text-align: center;
     padding: 12px;
-    text-decoration: none;
     font-size: 18px;
     line-height: 25px;
     border-radius: 4px;
@@ -41,6 +42,8 @@
     color: $white;
   }
   .header__header-link-logOut{
+    background-color: transparent;
+    border: none;
     float: left;
     color: $white;
     text-align: center;
@@ -49,6 +52,7 @@
     font-size: 18px;
     line-height: 25px;
     border-radius: 4px;
+    margin-right: 1rem;
     transition: 0.5s;
   }
   .header__header-link-logOut:hover{

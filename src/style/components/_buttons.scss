@@ -34,6 +34,19 @@
         background-color: lighten($color: $primary, $amount: 20);
     }
 }
+.btn-danger{
+    background-color: $danger;
+    border-radius: 2px;
+
+    &:hover{
+        background-color: darken($color: $danger, $amount: 15);
+        transition: background-color .5s ease;
+    }
+    &:disabled{
+        background-color: lighten($color: $danger, $amount: 20);
+    }
+}
+
 .btn-block{
     width: 100%;
 }

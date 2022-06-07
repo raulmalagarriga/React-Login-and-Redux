@@ -1,12 +1,28 @@
 import React from 'react'
+import {useDispatch} from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { startLogOut } from '../../actions/auth';
 
 export const Header = () => {
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const handleLogOut = () => {
+      dispatch(startLogOut());
+  }
+  const handleSettings = () => {
+    navigate('/userSettings');
+  }
+  const handleHome = () => {
+    navigate('/');
+  }
+
   return (
-    <div className="header__header">
-      <a href='#C' className="header__header-logo">CompanyLogo</a>
+    <div className="header__header animate__animated animate__fadeIn">
+      <button  className="header__header-link" onClick={handleHome}>Home</button>
       <div className="header__header-right">
-        <a className="header__header-link" href="#contact">User Settings</a>
-        <a className="header__header-link-logOut" href="#about">LogOut</a>
+        <button className="header__header-link" onClick={handleSettings}>User Settings</button>
+        <button className="header__header-link-logOut" onClick={handleLogOut}>LogOut</button>
       </div>
     </div>
   )

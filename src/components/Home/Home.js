@@ -3,11 +3,14 @@ import { Header } from '../UI/Header'
 import { Sidebar } from '../UI/Sidebar'
 export const Home = () => {
   return (
-    <div className='journal__main-content'>
-      <Sidebar />
-      <main className='UI__main'>
+    <>
+      <div className='journal__main-content animate__animated animate__fadeIn'>
+        <Sidebar />
+        <main className='UI__main'>
         <Header />
-      </main>
-    </div>
+          {/* content */}
+        </main>
+      </div>
+    </>
   )
 }
