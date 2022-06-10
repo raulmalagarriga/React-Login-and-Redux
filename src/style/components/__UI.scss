@@ -1,3 +1,18 @@
 .UI__main{
     background-color: $light-gray;
 }
+.label{
+    width: 100%;
+}
+.label-danger{
+    width: 100%;
+    color: $danger;
+}
+.titles{
+    font-weight: bold;
+    font-size: 60px;
+}
+.container-form-edit{
+    // margin: 20px 0px 30px 50px;
+    padding: 30px 30px 30px 30px;
+}
