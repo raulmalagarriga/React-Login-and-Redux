@@ -3,12 +3,14 @@ import { combineReducers, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 // Reducers
 import { authReducer } from '../reducers/authReducers';
+import { editReducer } from '../reducers/editReducer';
 import { uiReducer } from '../reducers/uiReducer';
 
 // All reducers here 
 const reducer = combineReducers({
   auth: authReducer,
-  ui: uiReducer
+  ui: uiReducer,
+  EditU: editReducer
 });
 
 // This thunk is for async actions 

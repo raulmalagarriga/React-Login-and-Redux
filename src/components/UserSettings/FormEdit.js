@@ -1,6 +1,41 @@
+import { getAuth } from 'firebase/auth';
 import React from 'react';
+import { useDispatch } from 'react-redux';
+import Swal from 'sweetalert2';
+import { startEditEmail, startEditUsername } from '../../actions/EditUser';
+import { useForm } from '../../hooks/useForm';
+import validator from 'validator';
 
 const FormEdit = () => {
+    
+    const dispatch = useDispatch();
+    const [Formvalues , handleInputChange , reset] = useForm({
+        username: '',
+        email: '',
+        password: '',
+        repeatPassword: ''
+    });
+    const auth = getAuth();
+    console.log(auth.currentUser.email)
+    const { username , email , password , repeatPassword } = Formvalues;
+    
+    const handleUsernameEdit = () => {
+        console.log(username)
+        if( username !== ''){
+            dispatch( startEditUsername( username ) );
+        }else{
+            Swal.fire('Error' , 'Please enter a new username' , 'error');
+        }
+    }
+    const handleEmailEdit = () => {
+        console.log(username)
+        if( validator.isEmail(email) ){
+            dispatch( startEditEmail( email ) );
+        }else{
+            Swal.fire('Error' , 'Please enter a valid email' , 'error');
+        }
+    }
+
     return ( 
         <>
             <div className='container'> 
@@ -14,18 +49,26 @@ const FormEdit = () => {
                                 <input 
                                     type="text" 
                                     className="form-control" 
-                                    placeholder="New username" 
+                                    placeholder="New username"
+                                    name='username'
+                                    value={username}
+                                    onChange={handleInputChange} 
                                 />
-                                <button className="btn btn-primary" type="button" id="button-addon1">Done</button>
+                                <button className="btn btn-primary" type="button" onClick={handleUsernameEdit}>
+                                    Done
+                                </button>
                             </div>
                             <div className="input-group mb-5">
                                 <h4 className='label'>Edit email</h4>
                                 <input 
                                     type="text" 
                                     className="form-control" 
-                                    placeholder="email@email.com" 
+                                    placeholder="email@email.com"
+                                    name='email'
+                                    value={email}
+                                    onChange={handleInputChange} 
                                 />
-                                <button className="btn btn-primary" type="button" id="button-addon1">Done</button>
+                                <button className="btn btn-primary" type="button" onClick={handleEmailEdit}>Done</button>
                             </div>
                         </div>
                         <div className='col'>
@@ -35,7 +78,10 @@ const FormEdit = () => {
                                 <input 
                                     type="text" 
                                     className="form-control" 
-                                    placeholder="New password" 
+                                    placeholder="New password"
+                                    name='password'
+                                    value={password}
+                                    onChange={handleInputChange} 
                                 />
                             </div>
                             <div className="input-group mb-5">
@@ -43,7 +89,10 @@ const FormEdit = () => {
                                 <input 
                                     type="text" 
                                     className="form-control" 
-                                    placeholder="Repeat new password" 
+                                    placeholder="Repeat new password"
+                                    name='repeatPassword'
+                                    value={repeatPassword}
+                                    onChange={handleInputChange} 
                                 />
                             </div>
                             <button className="btn btn-primary elemt-mid" type="button" id="button-addon1">Update password</button>

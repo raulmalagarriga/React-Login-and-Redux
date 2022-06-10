@@ -1,10 +1,14 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useSelector} from 'react-redux';
 
 export const Sidebar = () => {
 
     const { name } = useSelector(state => state.auth);
-    console.log( name )
+    console.log( name );
+
+    useEffect( () => {
+        console.log('username changed');
+    } , [name]);
 
   return (
     <>
