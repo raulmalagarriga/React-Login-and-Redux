@@ -1,24 +1,30 @@
-import { getAuth } from 'firebase/auth';
 import React from 'react';
+import { getAuth } from 'firebase/auth';
+import validator from 'validator';
 import { useDispatch } from 'react-redux';
 import Swal from 'sweetalert2';
-import { startEditEmail, startEditUsername } from '../../actions/EditUser';
+
+import { startEditEmail, startEditUsername, startRemoveUser, startUpdatePasswords } from '../../actions/EditUser';
 import { useForm } from '../../hooks/useForm';
-import validator from 'validator';
+import { login } from '../../actions/auth';
 
 const FormEdit = () => {
-    
+
+    // Get firebase user data
+    const auth = getAuth();
+    // Redux
     const dispatch = useDispatch();
-    const [Formvalues , handleInputChange , reset] = useForm({
-        username: '',
-        email: '',
+    // Custom hook for manage forms
+    const [Formvalues , handleInputChange ] = useForm({
+        username: auth.currentUser.displayName,
+        email: auth.currentUser.email,
         password: '',
         repeatPassword: ''
     });
-    const auth = getAuth();
-    console.log(auth.currentUser.email)
     const { username , email , password , repeatPassword } = Formvalues;
     
+    // Functions for edit buttons
+    // Username edit
     const handleUsernameEdit = () => {
         console.log(username)
         if( username !== ''){
@@ -27,13 +33,49 @@ const FormEdit = () => {
             Swal.fire('Error' , 'Please enter a new username' , 'error');
         }
     }
+    // Email edit
     const handleEmailEdit = () => {
         console.log(username)
         if( validator.isEmail(email) ){
+            // We must to re-login for change user's email
+            dispatch( login(auth.currentUser.uid, auth.currentUser.displayName) );
             dispatch( startEditEmail( email ) );
         }else{
             Swal.fire('Error' , 'Please enter a valid email' , 'error');
         }
+    }
+    // Password update
+    const handleUpdatePassword = () => {
+        console.log(password , repeatPassword);
+        if( password === repeatPassword ){
+                console.log('good');
+                // We must to re-login for change user's password
+                dispatch( login(auth.currentUser.uid, auth.currentUser.displayName) );
+                dispatch( startUpdatePasswords( password ));
+        }else{
+            Swal.fire('Error' , 'Passwords doesnt match or are too short' , 'error');
+        }
+    }
+    // Remove user from firebase
+    const handleRemoveUser = async() => {
+        // SweetAlert config
+        const { value: accept } = await Swal.fire({
+            title: 'Delete user',
+            input: 'checkbox',
+            inputValue: 1,
+            inputPlaceholder:
+              'I agree to delete my username permanently',
+            confirmButtonText:
+              'Continue <i class="fa fa-arrow-right"></i>',
+            inputValidator: (result) => {
+              return !result && 'You need to agree for continue'
+            }
+          })
+          if (accept) {
+            // We must to re-login for delete user
+            dispatch( login(auth.currentUser.uid, auth.currentUser.displayName) );
+            dispatch( startRemoveUser() );
+          }
     }
 
     return ( 
@@ -76,7 +118,7 @@ const FormEdit = () => {
                                 <h4 className='label mb-1'>Update password</h4>
                                 <h6 className='label'>Set new password</h6>
                                 <input 
-                                    type="text" 
+                                    type="password" 
                                     className="form-control" 
                                     placeholder="New password"
                                     name='password'
@@ -87,7 +129,7 @@ const FormEdit = () => {
                             <div className="input-group mb-5">
                                 <h6 className='label'>Repeat new password</h6>
                                 <input 
-                                    type="text" 
+                                    type="password" 
                                     className="form-control" 
                                     placeholder="Repeat new password"
                                     name='repeatPassword'
@@ -95,13 +137,13 @@ const FormEdit = () => {
                                     onChange={handleInputChange} 
                                 />
                             </div>
-                            <button className="btn btn-primary elemt-mid" type="button" id="button-addon1">Update password</button>
+                            <button className="btn btn-primary elemt-mid" type="button" onClick={handleUpdatePassword}>Update password</button>
                         </div>
                         <h5 className='label-danger'>Danger zone</h5>
                         <hr />
                         <div className="input-group mb-5">
                                 <h6 className='label'>Delete account</h6>
-                                <button className="btn btn-danger elemt-mid" type="button" id="button-addon1">Delete</button>
+                                <button className="btn btn-danger elemt-mid" type="button" onClick={handleRemoveUser}>Delete</button>
                         </div>
                     </div>
                 </div>
