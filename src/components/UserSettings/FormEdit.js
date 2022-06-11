@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 
 import { startEditEmail, startEditUsername, startRemoveUser, startUpdatePasswords } from '../../actions/EditUser';
 import { useForm } from '../../hooks/useForm';
-import { login } from '../../actions/auth';
+import { startLoginEmailPassword } from '../../actions/auth';
 
 const FormEdit = () => {
 
@@ -14,6 +14,7 @@ const FormEdit = () => {
     const auth = getAuth();
     // Redux
     const dispatch = useDispatch();
+
     // Custom hook for manage forms
     const [Formvalues , handleInputChange ] = useForm({
         username: auth.currentUser.displayName,
@@ -23,59 +24,87 @@ const FormEdit = () => {
     });
     const { username , email , password , repeatPassword } = Formvalues;
     
-    // Functions for edit buttons
+    // Functions for edit options
     // Username edit
     const handleUsernameEdit = () => {
-        console.log(username)
-        if( username !== ''){
+        if( username !== '' && username !== auth.currentUser.displayName){
             dispatch( startEditUsername( username ) );
         }else{
             Swal.fire('Error' , 'Please enter a new username' , 'error');
         }
     }
     // Email edit
-    const handleEmailEdit = () => {
-        console.log(username)
-        if( validator.isEmail(email) ){
+    const handleEmailEdit = async() => {
+        if( validator.isEmail(email) && email !== auth.currentUser.email ){
             // We must to re-login for change user's email
-            dispatch( login(auth.currentUser.uid, auth.currentUser.displayName) );
-            dispatch( startEditEmail( email ) );
+            // SweetAlert config 
+            const { value: password } = await Swal.fire({
+                title: 'Enter your password',
+                input: 'password',
+                inputLabel: 'Password',
+                inputPlaceholder: 'Enter your password',
+                inputAttributes: {
+                  maxlength: 10,
+                  autocapitalize: 'off',
+                  autocorrect: 'off'
+                }
+              })
+              if (password) {
+                    // We must to re-login for change user's password
+                    await dispatch( startLoginEmailPassword( auth.currentUser.email , password) );
+                    dispatch( startEditEmail( email ) );
+                }
         }else{
-            Swal.fire('Error' , 'Please enter a valid email' , 'error');
+                Swal.fire('Error' , 'Please enter a valid email' , 'error');
         }
     }
     // Password update
-    const handleUpdatePassword = () => {
-        console.log(password , repeatPassword);
+    const handleUpdatePassword = async() => {
+        if( password === '' ){
+            Swal.fire('Error' , 'Write a new password!' , 'error');
+            return
+        }
         if( password === repeatPassword ){
+            const { value: oldPassword } = await Swal.fire({
+                title: 'Enter your old password',
+                input: 'password',
+                inputLabel: 'Password',
+                inputPlaceholder: 'Enter your password',
+                inputAttributes: {
+                  maxlength: 10,
+                  autocapitalize: 'off',
+                  autocorrect: 'off'
+                }
+              });
+              if (oldPassword) {
                 console.log('good');
                 // We must to re-login for change user's password
-                dispatch( login(auth.currentUser.uid, auth.currentUser.displayName) );
+                await dispatch( startLoginEmailPassword( auth.currentUser.email , oldPassword) );
                 dispatch( startUpdatePasswords( password ));
+            }
         }else{
-            Swal.fire('Error' , 'Passwords doesnt match or are too short' , 'error');
+            Swal.fire('Error' , 'Passwords doesnt match' , 'error');
         }
     }
     // Remove user from firebase
     const handleRemoveUser = async() => {
         // SweetAlert config
-        const { value: accept } = await Swal.fire({
-            title: 'Delete user',
-            input: 'checkbox',
-            inputValue: 1,
-            inputPlaceholder:
-              'I agree to delete my username permanently',
-            confirmButtonText:
-              'Continue <i class="fa fa-arrow-right"></i>',
-            inputValidator: (result) => {
-              return !result && 'You need to agree for continue'
+        const { value: password } = await Swal.fire({
+            title: 'Enter your password to confirm',
+            input: 'password',
+            inputLabel: 'You are going to delete your account!',
+            inputPlaceholder: 'Password',
+            inputAttributes: {
+                maxlength: 10,
+                autocapitalize: 'off',
+                autocorrect: 'off'
             }
-          })
-          if (accept) {
-            // We must to re-login for delete user
-            dispatch( login(auth.currentUser.uid, auth.currentUser.displayName) );
+        });
+        if (password) {
+            // We must to re-login for change user's password
+            await dispatch( startLoginEmailPassword( auth.currentUser.email , password) );
             dispatch( startRemoveUser() );
-          }
+        }
     }
 
     return ( 
