@@ -102,21 +102,24 @@ const FormEdit = () => {
         });
         if (password) {
             // We must to re-login for change user's password
-            await dispatch( startLoginEmailPassword( auth.currentUser.email , password) );
-            dispatch( startRemoveUser() );
+            // await dispatch( startLoginEmailPassword( auth.currentUser.email , password) );
+            dispatch( startRemoveUser(password) );
         }
     }
 
     return ( 
         <>
-            <div className='container'> 
+            <div className='container container-form-edit'> 
                 <h3 className='titles mt-5'>Edit user info</h3>
                 <hr />
-                <div className='container-form-edit'>
+                <div>
                     <div className='row align-items-center'>
                         <div className='col'>
                             <div className="input-group mb-5">
-                                <h4 className='label'>Edit username</h4>
+                                <h4 className='label'>
+                                    Edit username
+                                    <i class="ml-1 fa-solid fa-user"></i>
+                                </h4>
                                 <input 
                                     type="text" 
                                     className="form-control" 
@@ -130,7 +133,10 @@ const FormEdit = () => {
                                 </button>
                             </div>
                             <div className="input-group mb-5">
-                                <h4 className='label'>Edit email</h4>
+                                <h4 className='label'>
+                                    Edit email
+                                    <i class="ml-1 fa-solid fa-envelope"></i>
+                                </h4>
                                 <input 
                                     type="text" 
                                     className="form-control" 
@@ -144,7 +150,10 @@ const FormEdit = () => {
                         </div>
                         <div className='col'>
                             <div className="input-group mb-5">
-                                <h4 className='label mb-1'>Update password</h4>
+                                <h4 className='label mb-1'>
+                                    Update password
+                                    <i class="ml-1 fa-solid fa-lock"></i>
+                                </h4>
                                 <h6 className='label'>Set new password</h6>
                                 <input 
                                     type="password" 
@@ -168,7 +177,10 @@ const FormEdit = () => {
                             </div>
                             <button className="btn btn-primary elemt-mid" type="button" onClick={handleUpdatePassword}>Update password</button>
                         </div>
-                        <h5 className='label-danger'>Danger zone</h5>
+                        <h5 className='label-danger'>
+                            Danger zone
+                            <i class="ml-1 fa-solid fa-triangle-exclamation"></i>    
+                        </h5>
                         <hr />
                         <div className="input-group mb-5">
                                 <h6 className='label'>Delete account</h6>

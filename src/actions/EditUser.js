@@ -1,4 +1,4 @@
-import { getAuth , updateProfile , updateEmail, updatePassword, deleteUser } from "firebase/auth";
+import { getAuth , updateProfile , updateEmail, updatePassword, deleteUser, signInWithEmailAndPassword } from "firebase/auth";
 import { types } from "../types/types"; 
 import Swal from "sweetalert2";
 import { login, startLogOut } from "./auth";
@@ -50,7 +50,7 @@ export const editEmail = (email) => {
 }
 // Update passwords
 export const startUpdatePasswords = ( password ) => {
-    return async( dispatch ) => {
+    return async( ) => {
         
         await updatePassword( auth.currentUser, password ).then(() => {
             
@@ -62,14 +62,17 @@ export const startUpdatePasswords = ( password ) => {
     }
 }
 // Remove user account
-export const startRemoveUser = () => {
+export const startRemoveUser = ( password ) => {
     return async( dispatch ) => {
-        
-        await deleteUser( auth.currentUser ).then(() => {
-            Swal.fire('Success' , 'Account removed!' , 'success');
-            dispatch( startLogOut() );
-          }).catch((err) => {
-            Swal.fire('Error' , err.message , 'error');
-          });
+        // console.log(auth.currentUser.metadata);
+        signInWithEmailAndPassword( auth, auth.currentUser.email, password )
+        .then(
+            await deleteUser( auth.currentUser ).then(() => {
+                Swal.fire('Success' , 'Account removed!' , 'success');
+                dispatch( startLogOut() );
+            }).catch((err) => {
+                Swal.fire('Error' , err.message + 'Try again please' , 'error');             
+            })
+        )
     }
 }

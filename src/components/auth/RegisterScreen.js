@@ -11,10 +11,10 @@ export const RegisterScreen = () => {
       // Redux
       const dispatch = useDispatch();
       const [formValues , handleInputChange]  = useForm({
-            name: '',
-            email: '',
-            password: '',
-            password2: ''
+            name: 'user',
+            email: 'user@gmail.com',
+            password: '123456',
+            password2: '123456'
         });
         const { name , email , password , password2} = formValues;
         
